@@ -9,7 +9,8 @@ fetch('./songs.json')
         saveAudioToCache(songList);
         init();
 })
-var songsList = songList
+let songsList = [];
+songsList = songList.slice();
 const SL = document.getElementById('songPrint');
 const shuffleButton = document.getElementById('shuffle');
 const songPlayer = document.getElementById('song');
@@ -39,24 +40,26 @@ async function shuffle(currentSong) {
     audio.load();
     audio.play();
 
-    songsList = songList.filter(item => item !== currentSong);
+    const songIndex = songsList.indexOf(currentSong) ;
+    if (songIndex !== -1) {
+        songsList.splice(songIndex, 1)
+    }
+    console.log(currentSong)
+    console.log(songsList)
 }
 
 function repeatSongs(){
-    currentSong = getRandomItem(songsList);
-    SL.textContent = currentSong;
-    shuffle(currentSong);
+    songsList = songList.slice();
+    console.log(songList)
+    return songsList[Math.floor(Math.random() * songsList.length)];
 }
 
 function getRandomItem(arr) {
-    if (arr.length <= 0) {
-        songsList = songList
+    if (arr.length >= 1) {
+        var song = arr[Math.floor(Math.random() * arr.length)];
     }
-
-    var song = arr[Math.floor(Math.random() * arr.length)];
-
-    if (song == undefined) {
-        repeatSongs()
+    else {
+        song = repeatSongs()
     }
     return song
 };
